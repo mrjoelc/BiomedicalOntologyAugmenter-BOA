@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 flask = "==1.1.2"
 flask-restful = "*"
+kafka-python = "*"
 
 [dev-packages]
 
