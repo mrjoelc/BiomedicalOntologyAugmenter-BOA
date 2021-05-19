@@ -7,6 +7,7 @@ name = "pypi"
 flask = "==1.1.2"
 flask-restful = "*"
 kafka-python = "*"
+tabulate = "*"
 
 [dev-packages]
 

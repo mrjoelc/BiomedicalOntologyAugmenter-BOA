@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<head>
+  <style>
+  .boxed {
+    border: 1px solid #dddddd;
+    padding: 8px;
+  }
+
+  h1, p, label {
+    font-family: arial, sans-serif;
+    padding: 8px;
+  }
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f0f0f0;
+  }
+
+  .button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+  }
+
+  .button4 {
+    width: 100%;
+    background-color: white;
+    color: black;
+    border: 2px solid #e7e7e7;
+  }
+
+  .button4:hover {background-color: #e7e7e7;}
+
+  input[type=text] {
+    font-family: arial, sans-serif;
+    font-size:12pt;
+    width: 98%;
+    padding: 8px;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 3px;
+  }
+
+  </style>
+  </head>
+<html>
+  <body>
+
+    <h1>BOA - Biomedical Ontology Extractor</h1>
+
+    <p class="boxed" >SEARCH KEYWORDS</p>
+    <form action="/">
+      {% if keywords == None %}
+        <input type="text" id="keywords" name="keywords" placeholder="Insert keywords here"><br><br>
+      {% else %}
+        <input type="text" id="keywords" name="keywords" value="{{keywords}}" placeholder="Insert keywords here"><br><br>
+      {% endif %}
+
+      <input class="button button4" type="submit" value="SEARCH IN ONTOLOGY">
+    </form>
+
+    <table>
+      <tr>
+        <th></th>
+        <th>#</th>
+        <th>Class Label</th>
+        <th>IRI</th>
+      </tr>
+
+      <form action="/extract">
+        <p class="boxed">REPOSITORY</p>
+        <input type="radio" id="Google-Scholar" name="repository" value="Google-Scholar" checked>
+        <label for="Google-Scholar">Google-Scholar</label> <br><br>
+        <input type="radio" id="NCBI" name="repository" value="NCBI">
+        <label for="NCBI">NCBI</label> <br><br>
+        <input class="button button4" type="submit" value="SUBMIT TO REPOSITORY">
+        {% for item in listOfMatches %}
+          <tr>
+            <th><input type="radio" id="{{item[0]}}" name="classLabel" value="{{ item[0]}}"></th>
+            <th>{{loop.index}}</th>
+            <th><label for="{{item[0]}}">{{item[0]}}</label></th>
+            <th><a href="{{item[1]}}"> {{item[1]}}</a></th>
+          </tr>
+        {% endfor %}
+    </form>
+    
+    </table>
+
+  </body>
+</html>
