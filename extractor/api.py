@@ -8,9 +8,8 @@ app = Flask(__name__)
 api = Api(app)
 
 producer = KafkaProducer(
-    bootstrap_servers=['kafka:9092'],
+    bootstrap_servers=['localhost:9092'],
     value_serializer=lambda x: dumps(x).encode('utf-8'), 
-    api_version=(2, 0, 2)
 )
 
 @app.route("/")
