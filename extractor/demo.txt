@@ -7,3 +7,4 @@ dystonia
 flu
 parkinson
 scoliosis
+cessation_of_cardiac_activity_death
