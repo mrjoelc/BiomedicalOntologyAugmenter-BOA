@@ -90,12 +90,12 @@
         <p class="boxed">REPOSITORY</p>
         <input type="radio" id="Google-Scholar" name="repository" value="Google-Scholar" checked>
         <label for="Google-Scholar">Google-Scholar</label> <br><br>
-        <input type="radio" id="NCBI" name="repository" value="NCBI">
-        <label for="NCBI">NCBI</label> <br><br>
+        <input type="radio" id="PubMed" name="repository" value="PubMed">
+        <label for="PubMed">PubMed</label> <br><br>
         <input class="button button4" type="submit" value="SUBMIT TO REPOSITORY">
         {% for item in listOfMatches %}
           <tr>
-            <th><input type="radio" id="{{item[0]}}" name="classLabel" value="{{ item[0]}}"></th>
+            <th><input type="radio" id="{{item[0]}}" name="classLabel" value="{{item}}"></th>
             <th>{{loop.index}}</th>
             <th><label for="{{item[0]}}">{{item[0]}}</label></th>
             <th><a href="{{item[1]}}"> {{item[1]}}</a></th>

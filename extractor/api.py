@@ -21,6 +21,14 @@ def extract(searchitem):
             list_match.append([row[1],row[0]])
     return list_match
 
+def extract(searchitem):
+    list_match=[]
+    csvfile = csv.reader(open('assets/OBIB.csv', "r"), delimiter=",")
+    for row in csvfile:
+        if searchitem in row[1]:
+            list_match.append([row[1],row[0],row[5]])
+    return list_match
+
 
 @app.route("/", methods=["GET"])
 def getClassLabel():

@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 kafka-python = "*"
-scholarly = "*"
 pymed = "*"
 
 [dev-packages]

@@ -81,3 +81,41 @@ Exiting due to channel error.
 [GFX1-]: Receive IPC close with reason=AbnormalShutdown
 Exiting due to channel error.
 Exiting due to channel error.
+1621494479674	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-foreground" "-no-remote" "-profile" "/var/folders/3b/7s0rzsf910l8l_jkk6d75fz80000gn/T/rust_mozprofileYzIZES"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1621494490527	Marionette	INFO	Listening on port 49540
+1621494490651	Marionette	WARN	TLS certificate errors will be ignored for this session
+1621494490664	Marionette	ERROR	[19] No reply from Marionette:Register
+1621494502838	Marionette	INFO	Stopped listening on port 49540
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1621494506778	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-foreground" "-no-remote" "-profile" "/var/folders/3b/7s0rzsf910l8l_jkk6d75fz80000gn/T/rust_mozprofile5PQn5X"
+[GFX1-]: Receive IPC close with reason=AbnormalShutdown
+[GFX1-]: Receive IPC close with reason=AbnormalShutdown
+Exiting due to channel error.
+Exiting due to channel error.
+1621494570553	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-foreground" "-no-remote" "-profile" "/var/folders/3b/7s0rzsf910l8l_jkk6d75fz80000gn/T/rust_mozprofileJyFDu5"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1621494575890	Marionette	INFO	Listening on port 49765
+1621494575981	Marionette	WARN	TLS certificate errors will be ignored for this session
+1621494575995	Marionette	ERROR	[19] No reply from Marionette:Register
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1621494585766	Marionette	INFO	Stopped listening on port 49765
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1621494589729	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-foreground" "-no-remote" "-profile" "/var/folders/3b/7s0rzsf910l8l_jkk6d75fz80000gn/T/rust_mozprofileLNp61M"
+Exiting due to channel error.
+Exiting due to channel error.
+1621495057775	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-foreground" "-no-remote" "-profile" "/var/folders/3b/7s0rzsf910l8l_jkk6d75fz80000gn/T/rust_mozprofile30SudF"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1621495062744	Marionette	INFO	Listening on port 50060
+1621495062867	Marionette	WARN	TLS certificate errors will be ignored for this session
+1621495062880	Marionette	ERROR	[19] No reply from Marionette:Register
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1621495069503	Marionette	INFO	Stopped listening on port 50060
+1621495073892	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-foreground" "-no-remote" "-profile" "/var/folders/3b/7s0rzsf910l8l_jkk6d75fz80000gn/T/rust_mozprofilegHvvJ5"
+Exiting due to channel error.
+Exiting due to channel error.

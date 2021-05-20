@@ -2,6 +2,8 @@ from kafka import KafkaConsumer, consumer
 from json import loads
 from scholarly import scholarly
 import time
+import ast
+
 
 def createConsumer():
     return  KafkaConsumer(
@@ -25,19 +27,19 @@ def search_pubs_on_scholar_by_keyword(paper_keyword):
 #    paper_keyword = "steroid"
     search = scholarly.search_pubs(paper_keyword)
     print("Total Results: " + str(search.total_results))
-    for r in search:
-        #print(r)
-        #dict_fill = next(search)
-        #scholarly.pprint(dict_fill)
-        bib = r['bib']
-        title = bib['title']
-        #abstract = bib['abstract']
-        print(title)
+    scholarly.pprint(next(search))
+    # for r in search:
+    #     #print(r)
+    #     #dict_fill = next(search)
+    #     #scholarly.pprint(dict_fill)
+    #     bib = r['bib']
+    #     title = bib['title']
+    #     #abstract = bib['abstract']
+    #     print(title)
     #return title, abstract
         
 for event in consumer:
-    event_data = event.value
-    # Do whatever you want
-    print("RESEARCHED: " + event_data)
-    search_pubs_on_scholar_by_keyword(event_data)
+    res = ast.literal_eval(event.value)
+    print("-----RESEARCHED-CLASS-LABEL: " + res[0])
+    search_pubs_on_scholar_by_keyword(res[0])
     
