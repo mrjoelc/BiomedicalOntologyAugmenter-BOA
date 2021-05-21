@@ -38,12 +38,36 @@ def search_pubs_on_pubmed_by_keyword(keyword):
         # Print a JSON representation of the object
         print(article.toJSON())
 
+pubmed = PubMed(tool="Searcher", email="cvunict@gmail.com")
+def search_pubs_on_pubmed_by_keyword2(keyword):
+    articlesInfo = []
+    search = pubmed.query(keyword, max_results=10)
+    for article in search:
+        if(article.title and article.title != "" and
+           article.keywords and article.keywords != "" and
+           article.abstract and article.abstract != ""):
+            articlesInfo.append([article.title,
+                                article.keywords,
+                                article.abstract,
+                                article.conclusions])
+    return articlesInfo
 
 for event in consumer:
+    #attualmente res contiene [classlabel, IRI, description]
     res = ast.literal_eval(event.value)
+    
     print("-----RESEARCHED-CLASS-LABEL: " + res[0])
-    search_pubs_on_pubmed_by_keyword(res[0])
-    producer.send("matcher", value="res")
+    research = search_pubs_on_pubmed_by_keyword2(res[0])
+
+    x = {
+        "repository": 'PubMed',
+        "obib_research_data": res,
+        "repository_response": research
+    }
+
+    res = dumps(x)
+
+    producer.send("matcher", value=res)
 
         
 
