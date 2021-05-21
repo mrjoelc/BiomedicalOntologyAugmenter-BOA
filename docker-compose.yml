@@ -8,8 +8,24 @@ services:
     depends_on:
       - kafka
 
-  searcherScholar:
-    image: searcher_scholar:0.1    
+  searcher_pub_med:
+    image: searcher_pub_med:0.1    
+    restart: always
+    #ports:
+    #  - 8081:8081
+    depends_on:
+      - kafka
+
+  matcher:
+    image: matcher:0.1    
+    restart: always
+    #ports:
+    #  - 8081:8081
+    depends_on:
+      - kafka
+
+  reducer:
+    image: reducer:0.1    
     restart: always
     #ports:
     #  - 8081:8081

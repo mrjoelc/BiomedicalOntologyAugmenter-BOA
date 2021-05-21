@@ -7,7 +7,7 @@ import ast
 def createConsumer():
     return  KafkaConsumer(
             'PubMed',
-            bootstrap_servers=['localhost:9092'],
+            bootstrap_servers=['kafka:9092'],
             auto_offset_reset='latest',
             enable_auto_commit='latest',
             group_id='my-group-id',
@@ -15,7 +15,7 @@ def createConsumer():
 
 def createProducer():
     return KafkaProducer(
-        bootstrap_servers=['localhost:9092'],
+        bootstrap_servers=['kafka:9092'],
         value_serializer=lambda x: dumps(x).encode('utf-8'), 
     )
 
@@ -41,7 +41,7 @@ def search_pubs_on_pubmed_by_keyword(keyword):
 pubmed = PubMed(tool="Searcher", email="cvunict@gmail.com")
 def search_pubs_on_pubmed_by_keyword2(keyword):
     articlesInfo = []
-    search = pubmed.query(keyword, max_results=10)
+    search = pubmed.query(keyword, max_results=2)
     for article in search:
         if(article.title and article.title != "" and
            article.keywords and article.keywords != "" and
