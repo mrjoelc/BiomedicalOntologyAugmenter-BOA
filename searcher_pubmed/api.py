@@ -7,7 +7,7 @@ import ast
 def createConsumer():
     return  KafkaConsumer(
             'PubMed',
-            bootstrap_servers=['kafka:9092'],
+            bootstrap_servers=['localhost:9092'],
             auto_offset_reset='latest',
             enable_auto_commit='latest',
             group_id='my-group-id',
@@ -15,7 +15,7 @@ def createConsumer():
 
 def createProducer():
     return KafkaProducer(
-        bootstrap_servers=['kafka:9092'],
+        bootstrap_servers=['localhost:9092'],
         value_serializer=lambda x: dumps(x).encode('utf-8'), 
     )
 
@@ -29,46 +29,43 @@ for i in range(0,100):
     print("Consumer & producer created at " + str(i) + " tentative")
     break
 
-pubmed = PubMed(tool="Searcher", email="cvunict@gmail.com")
-def search_pubs_on_pubmed_by_keyword(keyword):
-    search = pubmed.query(keyword, max_results=10)
-    for article in search:
-        # Print the type of object we've found (can be either PubMedBookArticle or PubMedArticle)
-        print(type(article))
-        # Print a JSON representation of the object
-        print(article.toJSON())
 
 pubmed = PubMed(tool="Searcher", email="cvunict@gmail.com")
-def search_pubs_on_pubmed_by_keyword2(keyword):
+def search_pubs_on_pubmed_by_keyword(keyword, limit):
     articlesInfo = []
-    search = pubmed.query(keyword, max_results=2)
+    search = pubmed.query(keyword, max_results=limit)
     for article in search:
-        if(article.title and article.title != "" and
-           article.keywords and article.keywords != "" and
-           article.abstract and article.abstract != ""):
-            articlesInfo.append([article.title,
-                                article.keywords,
-                                article.abstract,
-                                article.conclusions])
+        #pymed.book.PubMedBookArticle 
+        print(type(article))
+        try: 
+            if(article.title and article.title != "" and
+                    article.keywords and article.keywords != "" and
+                    article.abstract and article.abstract != ""):
+                        print("nnnnnn")
+                        articlesInfo.append([article.title,
+                                            article.keywords,
+                                            article.abstract,
+                                            article.conclusions])
+        except:
+            continue
+        
     return articlesInfo
 
 for event in consumer:
     #attualmente res contiene [classlabel, IRI, description]
-    res = ast.literal_eval(event.value)
-    
-    print("-----RESEARCHED-CLASS-LABEL: " + res[0])
-    research = search_pubs_on_pubmed_by_keyword2(res[0])
+    res = loads(event.value)
+    obib_research_data = ast.literal_eval(res['obib_research_data'])
+    limit = res['limit']
+
+    print("-----RESEARCHED-CLASS-LABEL: " + obib_research_data[0])
+    research = search_pubs_on_pubmed_by_keyword(obib_research_data[0], int(limit))
 
     x = {
         "repository": 'PubMed',
-        "obib_research_data": res,
+        "obib_research_data": obib_research_data,
         "repository_response": research
     }
 
     res = dumps(x)
 
     producer.send("matcher", value=res)
-
-        
-
-    

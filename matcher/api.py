@@ -9,7 +9,7 @@ import tfidf_matcher as tm
 def createConsumer():
     return  KafkaConsumer(
             'matcher',
-            bootstrap_servers=['kafka:9092'],
+            bootstrap_servers=['localhost:9092'],
             auto_offset_reset='latest',
             enable_auto_commit='latest',
             group_id='my-group-id',
@@ -17,7 +17,7 @@ def createConsumer():
 
 def createProducer():
     return KafkaProducer(
-        bootstrap_servers=['kafka:9092'],
+        bootstrap_servers=['localhost:9092'],
         value_serializer=lambda x: dumps(x).encode('utf-8'), 
     )
 
@@ -56,6 +56,7 @@ def best_matches(original, lookup):
           best_match = article
     return formatArticle(best_match), tmp_mean
 
+ #[title, abstrac, "", p, p ,p, p,]
 def formatArticle(article):
     keywords = []
     formatted_article = []
@@ -77,6 +78,8 @@ for event in consumer:
     obib_research_data = res['obib_research_data']
     repository_response = res['repository_response']
 
+    print("Matches for '" + obib_research_data[0] + "' -> " + str(len(repository_response)))
+
     if(len(repository_response)>0):
         matches = create_lookup(repository_response)
         best_article, best_score = best_matches(obib_research_data[0], matches)
@@ -91,7 +94,7 @@ for event in consumer:
         }
 
         single_result = dumps(single_result)
-        #print(single_result)
+        print("best-score: " + str(best_score))
 
         result_to_forward = {
             obib_research_data[1] : {
@@ -111,7 +114,6 @@ for event in consumer:
 
         producer.send("reducer", value=result_to_forward)
     
-    print("Matches for '" + obib_research_data[0] + "' -> " + str(len(repository_response)))
 
 
 

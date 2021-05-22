@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <head>
+  <script language="JavaScript">
+    function toggle(source) {
+      checkboxes = document.getElementsByName('checkedClassTerm');
+      for(var i=0, n=checkboxes.length;i<n;i++) {
+        checkboxes[i].checked = source.checked;
+      }
+}
+  </script>
   <style>
   .boxed {
     border: 1px solid #dddddd;
@@ -60,6 +68,16 @@
     border-bottom-width: 3px;
   }
 
+  input[type=number] {
+    font-family: arial, sans-serif;
+    font-size:12pt;
+    padding: 8px;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 3px;
+  }
+
   </style>
   </head>
 <html>
@@ -80,7 +98,7 @@
 
     <table>
       <tr>
-        <th></th>
+        <th><input type="checkbox" onClick="toggle(this)" /></th>
         <th>#</th>
         <th>Class Label</th>
         <th>IRI</th>
@@ -88,14 +106,16 @@
 
       <form action="/extract">
         <p class="boxed">REPOSITORY</p>
-        <input type="radio" id="Google-Scholar" name="repository" value="Google-Scholar" checked>
-        <label for="Google-Scholar">Google-Scholar</label> <br><br>
-        <input type="radio" id="PubMed" name="repository" value="PubMed">
+        <input type="radio" id="PubMed" name="repository" value="PubMed" checked>
         <label for="PubMed">PubMed</label> <br><br>
+        <input type="radio" id="Google-Scholar" name="repository" value="Google-Scholar">
+        <label for="Google-Scholar">Google-Scholar</label> <br><br>
+        <label for="limit">Limit:</label>
+        <input type="number" id="limit" name="limit" value=20 min="1" max="1000">
         <input class="button button4" type="submit" value="SUBMIT TO REPOSITORY">
         {% for item in listOfMatches %}
           <tr>
-            <th><input type="radio" id="{{item[0]}}" name="classLabel" value="{{item}}"></th>
+            <th><input type="checkbox" name="checkedClassTerm" value="{{item}}"></th>
             <th>{{loop.index}}</th>
             <th><label for="{{item[0]}}">{{item[0]}}</label></th>
             <th><a href="{{item[1]}}"> {{item[1]}}</a></th>

@@ -2,14 +2,14 @@ from flask import Flask, request, render_template
 from flask_restful import Resource, Api, reqparse, abort, marshal, fields
 from kafka import KafkaProducer
 from json import dumps
-import csv
+import csv, ast
 
 # Initialize Flask
 app = Flask(__name__)
 api = Api(app)
 
 producer = KafkaProducer(
-    bootstrap_servers=['kafka:9092'],
+    bootstrap_servers=['localhost:9092'],
     value_serializer=lambda x: dumps(x).encode('utf-8'), 
 )
 
@@ -44,10 +44,20 @@ def getClassLabel():
 @app.route("/extract", methods=["GET", "POST"])
 def sendClassLabel():
     repository = request.args.get('repository')
-    classLabel = request.args.get('classLabel')
     print(repository)
-    producer.send(repository, value=classLabel)
-    return  "You're going to extract info about class id: " + classLabel + " in " + repository
+    limit = request.args.get('limit')
+    checkedClassTerms = request.args.getlist('checkedClassTerm')
+    s = "You're going to extract info in " + repository + "<br><br>"
+    for classTerm in checkedClassTerms:
+        #data = ast.literal_eval(classTerm)
+        data = {
+            'obib_research_data' : classTerm,
+            'limit' : limit
+        }
+        #data.append(str(limit))
+        producer.send(repository, value=dumps(data))
+        s += classTerm + '<br><br>'
+    return s
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)

@@ -6,7 +6,7 @@ import json
 def createConsumer():
     return  KafkaConsumer(
             'reducer',
-            bootstrap_servers=['kafka:9092'],
+            bootstrap_servers=['localhost:9092'],
             auto_offset_reset='latest',
             enable_auto_commit='latest',
             group_id='my-group-id',
