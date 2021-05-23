@@ -39,13 +39,13 @@ def search_pubs_on_pubmed_by_keyword(keyword, limit):
         print(type(article))
         try: 
             if(article.title and article.title != "" and
-                    article.keywords and article.keywords != "" and
-                    article.abstract and article.abstract != ""):
-                        print("nnnnnn")
-                        articlesInfo.append([article.title,
-                                            article.keywords,
-                                            article.abstract,
-                                            article.conclusions])
+               article.keywords and article.keywords != "" and
+               article.abstract and article.abstract != ""):
+                    print("nnnnnn")
+                    articlesInfo.append([article.title,
+                                        article.keywords,
+                                        article.abstract,
+                                        article.conclusions])
         except:
             continue
         

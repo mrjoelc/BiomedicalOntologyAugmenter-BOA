@@ -96,17 +96,17 @@ for event in consumer:
         single_result = dumps(single_result)
         print("best-score: " + str(best_score))
 
+  
         result_to_forward = {
-            obib_research_data[1] : {
-                'term_label' : obib_research_data[0],
-                'paper' : {
+            "IRI" : obib_research_data[1],
+            'term_label' : obib_research_data[0],
+            'paper' : {
                     'title' : best_article[0],
                     'keywords' : best_article[3],
                     'abstract' : best_article[1],
                     'conclusion' : best_article[2]
                 },
-                'score': best_score
-            }
+            'score': best_score,
         }
 
         result_to_forward = dumps(result_to_forward)
