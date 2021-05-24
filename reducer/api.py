@@ -8,7 +8,7 @@ import pymongo
 def createConsumer():
     return  KafkaConsumer(
             'reducer',
-            bootstrap_servers=['localhost:9092'],
+            bootstrap_servers=['kafka:9092'],
             auto_offset_reset='latest',
             enable_auto_commit='latest',
             group_id='my-group-id',
@@ -24,7 +24,8 @@ for i in range(0,100):
     print("Consumer & producer created at " + str(i) + " tentative")
     break
     
-client = pymongo.MongoClient('mongodb://localhost:27017/', 
+client = pymongo.MongoClient(host='mongo', 
+                             port=27017,
                              username='root', 
                              password='example')
 
@@ -59,9 +60,9 @@ def check_if_IRI_exists(iri):
      return mydoc['score']
     return -1
 
-with open("all_results.json", "r+") as jsonFile:
-    data = json.load(jsonFile)
-    counter = data['counter']+1
+# with open("all_results.json", "r+") as jsonFile:
+#     data = json.load(jsonFile)
+#     counter = data['counter']+1
 
 
 for event in consumer:
