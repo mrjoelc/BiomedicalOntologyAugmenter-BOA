@@ -8,44 +8,37 @@ import csv, ast
 app = Flask(__name__)
 api = Api(app)
 
+#creazione producer kafka
 producer = KafkaProducer(
     bootstrap_servers=['kafka:9092'],
     value_serializer=lambda x: dumps(x).encode('utf-8'), 
 )
 
-def extract(searchitem):
+def extract(searchitem): #estrazione informazione da OBIB
     list_match=[]
     csvfile = csv.reader(open('assets/OBIB.csv', "r"), delimiter=",")
     for row in csvfile:
         if searchitem in row[1]:
-            list_match.append([row[1],row[0]])
-    return list_match
-
-def extract(searchitem):
-    list_match=[]
-    csvfile = csv.reader(open('assets/OBIB.csv', "r"), delimiter=",")
-    for row in csvfile:
-        if searchitem in row[1]:
-            list_match.append([row[1],row[0],row[5]])
+            list_match.append([row[1],row[0],row[5]]) #si prelevano, term label, IRI, descrizione
     return list_match
 
 
 @app.route("/", methods=["GET"])
 def getClassLabel():
-    repository = request.args.get('repository')
-    keywords = request.args.get('keywords')
+    repository = request.args.get('repository') #seleziona da interfaccia il repository (scholar o pubMed)
+    keywords = request.args.get('keywords') #parola chiave di ricerca
     listOfMatches = []
-    if(keywords=="None"):
+    if(keywords=="None"):  
         listOfMatches = extract("")
     else:
-        listOfMatches = extract(str(keywords))
+        listOfMatches = extract(str(keywords)) 
     return render_template('searchInOntology.html', repository = repository, keywords=keywords, listOfMatches= listOfMatches)
 
 @app.route("/extract", methods=["GET", "POST"])
 def sendClassLabel():
     repository = request.args.get('repository')
     print(repository)
-    limit = request.args.get('limit')
+    limit = request.args.get('limit') #seleziona limite di risultati che si vuole ottenere nella su repository
     checkedClassTerms = request.args.getlist('checkedClassTerm')
     s = "You're going to extract info in " + repository + "<br><br>"
     for classTerm in checkedClassTerms:

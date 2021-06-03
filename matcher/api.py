@@ -33,30 +33,32 @@ for i in range(0,100):
     break
 
 def create_lookup(repository_response):
-    matches = []
+    lookupList = []
     for article in repository_response:
-        luckupList = []
-        luckupList.append(article[0])
-        luckupList.append(article[2])
+        lookup = []
+        lookup.append(article[0])
+        lookup.append(article[2])
         if(not article[3]):  
-            luckupList.append("")
+            lookup.append("")
         for kw in article[1]:
-            luckupList.append(kw)
-        matches.append(luckupList)
-    return matches
+            lookup.append(kw)
+        lookupList.append(lookup)
+    return lookupList
 
-def best_matches(original, lookup):
-    tmp_mean = 0
-    for article in lookup:
-        result = tm.matcher([original],article, len(article)-1).mean()
+def best_matches(term_label, lookupList):
+    best_score = 0
+    for article in lookupList:
+        #per ogni articolo calcola score di similarità con term_label
+        result = tm.matcher([term_label],article, len(article)-1).mean()
         #resultpy = result.astype(float)
-        resultpy = np.float64(result).item()
-        if resultpy >= tmp_mean :
-          tmp_mean = resultpy
+        score = np.float64(result).item()
+        if score >= best_score :
+          best_score = score
           best_match = article
-    return formatArticle(best_match), tmp_mean
+    return formatArticle(best_match), best_score
 
  #[title, abstrac, "", p, p ,p, p,]
+ 
 def formatArticle(article):
     keywords = []
     formatted_article = []

@@ -31,34 +31,34 @@ client = pymongo.MongoClient(host='mongo',
 
 
 def single_write_mongo(single_result):
-    old_score = check_if_IRI_exists(single_result['IRI'])
-    eventually_add(old_score, single_result)
-    
-
-def eventually_add(old_score, single_result):
     db = client.boe_database
     mycol = db.results
-    if old_score>0:
-        print("Document exists: " + single_result['IRI'])
-        if single_result['score']>old_score:
-            print("New score is better: " + str(single_result['score']))
-            x = { "IRI": single_result['IRI'] }
-            mycol.delete_one(x)
-            mycol.insert_one(single_result)
-        else:
-            print("Old score is better or equal: " + str(single_result['score']))
-    else:
+    old_score = check_if_IRI_exists(single_result['IRI'])
+
+    if old_score > 0: #se esiste uno score corrispondente alla ricerca, allora valuta se è peggiore o migliore di quello attuale
+        replace_if_better(old_score, single_result, mycol)
+    else:   #se non esiste, aggiungi direttamente
         print("Document not exists: " + single_result['IRI'])    
         mycol.insert_one(single_result)
+    
+def replace_if_better(old_score, single_result, mycol):
+    if single_result['score']>old_score: #se il risultato è migliore del vecchio score, allora cancella il vecchio record e aggiungi il nuovo
+        print("New score is better: " + str(single_result['score']))
+        x = { "IRI": single_result['IRI'] }
+        mycol.delete_one(x)
+        mycol.insert_one(single_result)
+    else:
+        print("Old score is better or equal: " + str(single_result['score'])) #se il vecchio score è migliore o uguale lascia com'è 
 
-def check_if_IRI_exists(iri):
+    
+def check_if_IRI_exists(iri): #verifia la presenza dell'IRI nel database
     db = client.boe_database
     mycol = db.results
     myquery = { "IRI": iri }
     mydoc = mycol.find_one(myquery)
     if(mydoc):
-     return mydoc['score']
-    return -1
+     return mydoc['score'] #se l'IRI è presente ritorna score corrispondente
+    return -1 # se l'ITI non c'è, ritorna -1
 
 # with open("all_results.json", "r+") as jsonFile:
 #     data = json.load(jsonFile)

@@ -30,14 +30,15 @@ for i in range(0,100):
     break
 
 
-pubmed = PubMed(tool="Searcher", email="cvunict@gmail.com")
+pubmed = PubMed(tool="Searcher", email="cvunict@gmail.com") #creazione oggetto pubMed con email 
 def search_pubs_on_pubmed_by_keyword(keyword, limit):
     articlesInfo = []
-    search = pubmed.query(keyword, max_results=limit)
+    search = pubmed.query(keyword, max_results=limit) #query su pubmed
     for article in search:
         #pymed.book.PubMedBookArticle 
         print(type(article))
         try: 
+            #si scartano gli articoli che non contengono: titolo, abstract o keywords
             if(article.title and article.title != "" and
                article.keywords and article.keywords != "" and
                article.abstract and article.abstract != ""):
