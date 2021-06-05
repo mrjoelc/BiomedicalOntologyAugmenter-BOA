@@ -40,8 +40,8 @@ def create_lookup(repository_response):
         lookup.append(article[2])
         if(not article[3]):  
             lookup.append("")
-        for kw in article[1]:
-            lookup.append(kw)
+        for keyword in article[1]:
+            lookup.append(keyword)
         lookupList.append(lookup)
     return lookupList
 
@@ -58,7 +58,7 @@ def best_matches(term_label, lookupList):
     return formatArticle(best_match), best_score
 
  #[title, abstrac, "", p, p ,p, p,]
- 
+
 def formatArticle(article):
     keywords = []
     formatted_article = []
