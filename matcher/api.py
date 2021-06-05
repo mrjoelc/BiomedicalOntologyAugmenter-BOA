@@ -42,8 +42,8 @@ def create_lookup(repository_response):
         lookup.append(article[2])
         if(not article[3]):  
             lookup.append("")
-        for kw in article[1]:
-            lookup.append(kw)
+        for keyword in article[1]:
+            lookup.append(keyword)
         lookupList.append(lookup)
     return lookupList
 
@@ -120,7 +120,7 @@ for event in consumer:
         #ne facciamo il dumps
         result_to_forward = dumps(result_to_forward)
         #print(result_to_forward)
-    
+
         producer.send("reducer", value=result_to_forward)
     
 
