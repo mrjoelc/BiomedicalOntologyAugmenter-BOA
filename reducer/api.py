@@ -8,36 +8,21 @@ import pymongo
 def createConsumer():
     return  KafkaConsumer(
             'reducer',
-            bootstrap_servers=['kafka:9092'],
+            bootstrap_servers=['localhost:9092'],
             auto_offset_reset='latest',
             enable_auto_commit='latest',
             group_id='my-group-id',
             value_deserializer=lambda x: loads(x.decode('utf-8')))
 
-for i in range(0,100):
-    try:
-        consumer = createConsumer()
-        #producer = createProducer()
-    except:
-        time.sleep(2)
-        continue
-    print("Consumer & producer created at " + str(i) + " tentative")
-    break
-    
-client = pymongo.MongoClient(host='mongo', 
-                             port=27017,
-                             username='root', 
-                             password='example')
 
-
-def single_write_mongo(single_result):
+def write_result_on_Mongo(single_result):
     db = client.boe_database
     mycol = db.results
-    old_score = check_if_IRI_exists(single_result['IRI'])
+    old_score = getScore_if_IRI_exists(single_result['IRI'])
 
     if old_score > 0: #se esiste uno score corrispondente alla ricerca, allora valuta se è peggiore o migliore di quello attuale
         replace_if_better(old_score, single_result, mycol)
-    else:   #se non esiste, aggiungi direttamente
+    else:             #se non esiste, aggiungi direttamente
         print("Document not exists: " + single_result['IRI'])    
         mycol.insert_one(single_result)
     
@@ -51,14 +36,33 @@ def replace_if_better(old_score, single_result, mycol):
         print("Old score is better or equal: " + str(single_result['score'])) #se il vecchio score è migliore o uguale lascia com'è 
 
     
-def check_if_IRI_exists(iri): #verifia la presenza dell'IRI nel database
+def getScore_if_IRI_exists(iri): #verifia la presenza dell'IRI nel database
     db = client.boe_database
     mycol = db.results
     myquery = { "IRI": iri }
     mydoc = mycol.find_one(myquery)
     if(mydoc):
      return mydoc['score'] #se l'IRI è presente ritorna score corrispondente
-    return -1 # se l'ITI non c'è, ritorna -1
+    return -1 # se l'IRI non c'è, ritorna -1
+
+for i in range(0,100):
+    try:
+        consumer = createConsumer()
+        #producer = createProducer()
+    except:
+        time.sleep(2)
+        continue
+    print("Consumer & producer created at " + str(i) + " tentative")
+    break
+    
+
+#definiamo il client per Mongo
+client = pymongo.MongoClient(host='localhost', 
+                             port=27017,
+                             username='root', 
+                             password='example')
+
+
 
 # with open("all_results.json", "r+") as jsonFile:
 #     data = json.load(jsonFile)
@@ -67,7 +71,7 @@ def check_if_IRI_exists(iri): #verifia la presenza dell'IRI nel database
 
 for event in consumer:
     res = loads(event.value)
-    single_write_mongo(res)
+    write_result_on_Mongo(res)
     
     # with open("all_results.json", "r+") as jsonFile:
     #     data = json.load(jsonFile)

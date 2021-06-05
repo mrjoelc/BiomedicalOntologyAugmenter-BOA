@@ -9,7 +9,7 @@ import tfidf_matcher as tm
 def createConsumer():
     return  KafkaConsumer(
             'matcher',
-            bootstrap_servers=['kafka:9092'],
+            bootstrap_servers=['localhost:9092'],
             auto_offset_reset='latest',
             enable_auto_commit='latest',
             group_id='my-group-id',
@@ -17,7 +17,7 @@ def createConsumer():
 
 def createProducer():
     return KafkaProducer(
-        bootstrap_servers=['kafka:9092'],
+        bootstrap_servers=['localhost:9092'],
         value_serializer=lambda x: dumps(x).encode('utf-8'), 
     )
 
@@ -32,6 +32,8 @@ for i in range(0,100):
     print("Consumer & producer created at " + str(i) + " tentative")
     break
 
+#create_lookup formatta article da:
+#['title', 'abstract', 'conclusion', ['kw',...,'kw']] -> ['title', 'abstrac', 'conclusion', 'kw', ... ,'kw']
 def create_lookup(repository_response):
     lookupList = []
     for article in repository_response:
@@ -52,13 +54,15 @@ def best_matches(term_label, lookupList):
         result = tm.matcher([term_label],article, len(article)-1).mean()
         #resultpy = result.astype(float)
         score = np.float64(result).item()
+        #manteniamo sempre il miglior score
         if score >= best_score :
           best_score = score
-          best_match = article
+          best_match = article      
     return formatArticle(best_match), best_score
 
- #[title, abstrac, "", p, p ,p, p,]
  
+#formatArticle formatta article da:
+#['title', 'abstrac', 'conclusion', 'kw', ... ,'kw'] -> ['title', 'abstract', 'conclusion', ['kw',...,'kw']]
 def formatArticle(article):
     keywords = []
     formatted_article = []
@@ -75,7 +79,7 @@ def formatArticle(article):
 
 for event in consumer:
     res = loads(event.value)
-
+    
     repository = res['repository']
     obib_research_data = res['obib_research_data']
     repository_response = res['repository_response']
@@ -86,19 +90,21 @@ for event in consumer:
         matches = create_lookup(repository_response)
         best_article, best_score = best_matches(obib_research_data[0], matches)
         
-        single_result = {
-            'obib_research_data': obib_research_data,
-            'matches': matches,
-            repository : {
-                "best_match": best_article,
-                "best_score": best_score,
-            }
-        }
 
-        single_result = dumps(single_result)
+        #Mantiene per una data ricerca sia tutti gli articoli per cui si ha match e best match
+        # single_result = {
+        #     'obib_research_data': obib_research_data,
+        #     'matches': matches,
+        #     repository : {
+        #         "best_match": best_article,
+        #         "best_score": best_score,
+        #     }
+        # }
+        # single_result = dumps(single_result)
+
         print("best-score: " + str(best_score))
-
-  
+        
+        #risultati da inoltrare nella pipeline
         result_to_forward = {
             "IRI" : obib_research_data[1],
             'term_label' : obib_research_data[0],
@@ -111,9 +117,10 @@ for event in consumer:
             'score': best_score,
         }
 
+        #ne facciamo il dumps
         result_to_forward = dumps(result_to_forward)
         #print(result_to_forward)
-
+    
         producer.send("reducer", value=result_to_forward)
     
 

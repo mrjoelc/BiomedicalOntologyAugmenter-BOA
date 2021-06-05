@@ -10,7 +10,7 @@ api = Api(app)
 
 #creazione producer kafka
 producer = KafkaProducer(
-    bootstrap_servers=['kafka:9092'],
+    bootstrap_servers=['localhost:9092'],
     value_serializer=lambda x: dumps(x).encode('utf-8'), 
 )
 
