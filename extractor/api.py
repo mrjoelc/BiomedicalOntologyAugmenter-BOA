@@ -41,15 +41,15 @@ def sendClassLabel():
     limit = request.args.get('limit') #seleziona limite di risultati che si vuole ottenere nella su repository
     checkedClassTerms = request.args.getlist('checkedClassTerm')
     s = "You're going to extract info in " + repository + "<br><br>"
-    for classTerm in checkedClassTerms:
+    for obib_research_data in checkedClassTerms:
         #data = ast.literal_eval(classTerm)
         data = {
-            'obib_research_data' : classTerm,
+            'obib_research_data' : obib_research_data,
             'limit' : limit
         }
         #data.append(str(limit))
         producer.send(repository, value=dumps(data))
-        s += classTerm + '<br><br>'
+        s += obib_research_data + '<br><br>'
     return s
 
 if __name__ == "__main__":
