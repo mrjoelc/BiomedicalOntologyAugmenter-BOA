@@ -1,3 +1,8 @@
+#Authors:
+#   Gioele Cageggi - gcageggi@gmail.com
+#   Pietro Andrea Vassallo - pietrovassallo04@gmail.com
+
+
 from kafka import KafkaConsumer, consumer, KafkaProducer
 from json import loads, dumps
 import time
@@ -7,7 +12,7 @@ import ast
 def createConsumer():
     return  KafkaConsumer(
             'PubMed',
-            bootstrap_servers=['localhost:9092'],
+            bootstrap_servers=['kafka:9092'],
             auto_offset_reset='latest',
             enable_auto_commit='latest',
             group_id='my-group-id',
@@ -15,7 +20,7 @@ def createConsumer():
 
 def createProducer():
     return KafkaProducer(
-        bootstrap_servers=['localhost:9092'],
+        bootstrap_servers=['kafka:9092'],
         value_serializer=lambda x: dumps(x).encode('utf-8'), 
     )
 

@@ -1,3 +1,7 @@
+#Authors:
+#   Gioele Cageggi - gcageggi@gmail.com
+#   Pietro Andrea Vassallo - pietrovassallo04@gmail.com
+
 from kafka import KafkaConsumer, consumer
 from json import loads, dumps
 import time
@@ -8,7 +12,7 @@ import pymongo
 def createConsumer():
     return  KafkaConsumer(
             'reducer',
-            bootstrap_servers=['localhost:9092'],
+            bootstrap_servers=['kafka:9092'],
             auto_offset_reset='latest',
             enable_auto_commit='latest',
             group_id='my-group-id',
@@ -57,7 +61,7 @@ for i in range(0,100):
     
 
 #definiamo il client per Mongo
-client = pymongo.MongoClient(host='localhost', 
+client = pymongo.MongoClient(host='mongo', 
                              port=27017,
                              username='root', 
                              password='example')

@@ -1,3 +1,7 @@
+#Authors:
+#   Gioele Cageggi - gcageggi@gmail.com
+#   Pietro Andrea Vassallo - pietrovassallo04@gmail.com
+
 from kafka import KafkaConsumer, consumer
 from json import loads
 from scholarly import scholarly

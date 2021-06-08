@@ -1,3 +1,7 @@
+#Authors:
+#   Gioele Cageggi - gcageggi@gmail.com
+#   Pietro Andrea Vassallo - pietrovassallo04@gmail.com
+
 from flask import Flask, request, render_template
 from flask_restful import Resource, Api, reqparse, abort, marshal, fields
 from kafka import KafkaProducer
@@ -10,7 +14,7 @@ api = Api(app)
 
 #creazione producer kafka
 producer = KafkaProducer(
-    bootstrap_servers=['localhost:9092'],
+    bootstrap_servers=['kafka:9092'],
     value_serializer=lambda x: dumps(x).encode('utf-8'), 
 )
 
